@@ -1,2 +1,2 @@
 # bedrock-vc-issuer-coordinator-storage
-Storage for VC issuer coordinator
+A Bedrock module that provides storage for VC issuer coordinators.
