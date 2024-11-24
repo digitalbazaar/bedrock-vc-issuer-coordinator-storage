@@ -2,7 +2,7 @@
   "name": "@bedrock/vc-issuer-coordinator-storage",
   "version": "0.0.1-0",
   "type": "module",
-  "description": "Bedrock Tokenized Cache",
+  "description": "Bedrock VC Issuer Coordinator Storage",
   "main": "./lib/index.js",
   "scripts": {
     "lint": "eslint ."
