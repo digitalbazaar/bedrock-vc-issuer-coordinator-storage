@@ -1,7 +1,7 @@
 /*!
- * Copyright (c) 2020-2024 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2020-2025 Digital Bazaar, Inc. All rights reserved.
  */
-import {cleanDB, insertRecord} from './helpers.js';
+import {cleanDatabase, insertRecord} from './helpers.js';
 import {mockRecord1, mockRecord2} from './mock.data.js';
 import crypto from 'node:crypto';
 import {vcReferences} from '@bedrock/vc-issuer-coordinator-storage';
@@ -245,9 +245,9 @@ describe('VC References', function() {
 describe('VC Reference Database Tests', function() {
   describe('Indexes', function() {
     beforeEach(async () => {
-      const collectionName = 'vc-reference';
-      await cleanDB({collectionName});
+      await cleanDatabase();
 
+      const collectionName = vcReferences.COLLECTION_NAME;
       await insertRecord({record: mockRecord1, collectionName});
       // second record is inserted here in order to do proper assertions for
       // 'nReturned', 'totalKeysExamined' and 'totalDocsExamined'.
