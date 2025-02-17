@@ -1,6 +1,7 @@
 /*!
  * Copyright (c) 2024-2025 Digital Bazaar, Inc. All rights reserved.
  */
+import * as bedrock from '@bedrock/core';
 import * as helpers from './helpers.js';
 import {
   syncCredentialStatus, vcReferences
@@ -10,7 +11,15 @@ import {randomUUID} from 'node:crypto';
 describe.only('Sync API', function() {
   describe('syncCredentialStatus()', () => {
     let credentialIds;
+    let getCredentialCapability;
+    let updateStatusCapability;
     beforeEach(async () => {
+      const {baseUri} = bedrock.config.server;
+      getCredentialCapability = 'urn:zcap:root:' +
+        encodeURIComponent(`${baseUri}/issuers/1/credentials`);
+      updateStatusCapability = 'urn:zcap:root:' +
+        encodeURIComponent(`${baseUri}/statuses/1/credentials/status`);
+
       // add three example records to sync
       await helpers.cleanDatabase();
       credentialIds = [];
@@ -36,8 +45,8 @@ describe.only('Sync API', function() {
               yield {
                 credentialId,
                 newReferenceFields: {},
-                getCredentialCapability: {},
-                updateStatusCapability: {},
+                getCredentialCapability,
+                updateStatusCapability,
                 status: true
               };
             }
