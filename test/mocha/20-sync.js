@@ -40,7 +40,7 @@ describe.only('Sync API', function() {
       let result;
       try {
         result = await syncCredentialStatus({
-          async getStatusUpdates({cursor = {index: 0}, limit = 1000} = {}) {
+          async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
             const updates = [];
             let {index = 0} = cursor;
             while(index < credentialIds.length) {
@@ -53,10 +53,13 @@ describe.only('Sync API', function() {
                 newReferenceFields: {},
                 getCredentialCapability,
                 updateStatusCapability,
-                // FIXME: needs to be an array of statuses to be changed
-                // including status entry information of some sort, minimally
-                // the status purpose
-                status: true
+                status: {
+                  credentialStatus: {
+                    type: 'BitstringStatusListEntry',
+                    statusPurpose: 'revocation'
+                  },
+                  value: true
+                }
               });
             }
             return {
@@ -101,10 +104,13 @@ describe.only('Sync API', function() {
                   newReferenceFields: {},
                   getCredentialCapability,
                   updateStatusCapability,
-                  // FIXME: needs to be an array of statuses to be changed
-                  // including status entry information of some sort, minimally
-                  // the status purpose
-                  status: true
+                  status: {
+                    credentialStatus: {
+                      type: 'BitstringStatusListEntry',
+                      statusPurpose: 'revocation'
+                    },
+                    value: true
+                  }
                 });
               }
               return {
