@@ -26,7 +26,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
           credentialSubject: {
             name: 'Test'
           },
-          credentialStatus: statusInfo
+          credentialStatus: statusInfo.entry
         }
       });
     }));
