@@ -40,7 +40,7 @@ describe.only('Sync API', function() {
       let result;
       try {
         result = await syncCredentialStatus({
-          async getStatusUpdates({cursor, limit} = {}) {
+          async getStatusUpdates({cursor = {index: 0}, limit = 1000} = {}) {
             const updates = [];
             let {index = 0} = cursor;
             while(index < credentialIds.length) {

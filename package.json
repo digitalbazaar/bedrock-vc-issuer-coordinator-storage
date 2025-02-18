@@ -30,7 +30,8 @@
     "@digitalbazaar/lru-memoize": "^3.0.2",
     "assert-plus": "^1.0.0",
     "base64url-universal": "^2.0.0",
-    "canonicalize": "^2.0.0"
+    "canonicalize": "^2.0.0",
+    "p-queue": "^8.1.0"
   },
   "peerDependencies": {
     "@bedrock/app-identity": "4.0.0",
