@@ -40,16 +40,31 @@ describe.only('Sync API', function() {
       let result;
       try {
         result = await syncCredentialStatus({
-          async *asyncIteratorFn() {
-            for(const credentialId of credentialIds) {
-              yield {
+          async getStatusUpdates({cursor, limit} = {}) {
+            const updates = [];
+            let {index = 0} = cursor;
+            while(index < credentialIds.length) {
+              if(updates.length === limit) {
+                break;
+              }
+              const credentialId = credentialIds[index++];
+              updates.push({
                 credentialId,
                 newReferenceFields: {},
                 getCredentialCapability,
                 updateStatusCapability,
                 status: true
-              };
+              });
             }
+            return {
+              updates,
+              cursor: {
+                // common field
+                hasMore: index < (credentialIds.length - 1),
+                // use-case specific fields
+                index
+              }
+            };
           }
         });
       } catch(e) {
@@ -57,6 +72,7 @@ describe.only('Sync API', function() {
       }
       assertNoError(err);
       should.exist(result);
+      result.updateCount.should.equal(3);
     });
   });
 });
