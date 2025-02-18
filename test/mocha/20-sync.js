@@ -53,6 +53,9 @@ describe.only('Sync API', function() {
                 newReferenceFields: {},
                 getCredentialCapability,
                 updateStatusCapability,
+                // FIXME: needs to be an array of statuses to be changed
+                // including status entry information of some sort, minimally
+                // the status purpose
                 status: true
               });
             }
@@ -73,6 +76,59 @@ describe.only('Sync API', function() {
       assertNoError(err);
       should.exist(result);
       result.updateCount.should.equal(3);
+    });
+
+    it('syncs credential status w/multiple calls', async () => {
+      // do more than 1 call to test zero updates
+      const calls = credentialIds.length + 1;
+      for(let i = 0; i < calls; ++i) {
+        let err;
+        let result;
+        try {
+          result = await syncCredentialStatus({
+            async getStatusUpdates({cursor = {index: 0}} = {}) {
+              // force a limit of 1
+              const limit = 1;
+              const updates = [];
+              let {index = 0} = cursor;
+              while(index < credentialIds.length) {
+                if(updates.length === limit) {
+                  break;
+                }
+                const credentialId = credentialIds[index++];
+                updates.push({
+                  credentialId,
+                  newReferenceFields: {},
+                  getCredentialCapability,
+                  updateStatusCapability,
+                  // FIXME: needs to be an array of statuses to be changed
+                  // including status entry information of some sort, minimally
+                  // the status purpose
+                  status: true
+                });
+              }
+              return {
+                updates,
+                cursor: {
+                  // common field
+                  hasMore: index < (credentialIds.length - 1),
+                  // use-case specific fields
+                  index
+                }
+              };
+            }
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        should.exist(result);
+        if(i === credentialIds.length) {
+          result.updateCount.should.equal(0);
+        } else {
+          result.updateCount.should.equal(1);
+        }
+      }
     });
   });
 });
