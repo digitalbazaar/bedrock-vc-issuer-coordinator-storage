@@ -40,6 +40,7 @@ describe.only('Sync API', function() {
       let result;
       try {
         result = await syncCredentialStatus({
+          syncId: 'test1',
           async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
             const updates = [];
             let {index = 0} = cursor;
@@ -50,6 +51,8 @@ describe.only('Sync API', function() {
               const credentialId = credentialIds[index++];
               updates.push({
                 credentialId,
+                // FIXME: if not present, then skip local record update,
+                // only remote status update is required
                 newReferenceFields: {},
                 getCredentialCapability,
                 updateStatusCapability,
@@ -89,6 +92,7 @@ describe.only('Sync API', function() {
         let result;
         try {
           result = await syncCredentialStatus({
+            syncId: 'test2',
             async getStatusUpdates({cursor = {index: 0}} = {}) {
               // force a limit of 1
               const limit = 1;
