@@ -8,7 +8,7 @@ import {
 } from '@bedrock/vc-issuer-coordinator-storage';
 import {randomUUID} from 'node:crypto';
 
-describe.only('Sync API', function() {
+describe('Sync API', function() {
   describe('syncCredentialStatus()', () => {
     let credentialIds;
     let getCredentialCapability;
