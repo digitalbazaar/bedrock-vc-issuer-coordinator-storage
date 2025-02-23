@@ -51,9 +51,6 @@ describe.only('Sync API', function() {
               const credentialId = credentialIds[index++];
               updates.push({
                 credentialId,
-                // FIXME: if not present, then skip local record update,
-                // only remote status update is required
-                newReferenceFields: {},
                 getCredentialCapability,
                 updateStatusCapability,
                 status: {
@@ -82,6 +79,68 @@ describe.only('Sync API', function() {
       assertNoError(err);
       should.exist(result);
       result.updateCount.should.equal(3);
+
+      // there should be no update to the reference records
+      for(const credentialId of credentialIds) {
+        const record = await vcReferences.get({credentialId});
+        record.reference.sequence.should.equal(0);
+      }
+    });
+
+    it('syncs credential status w/reference update', async () => {
+      let err;
+      let result;
+      try {
+        result = await syncCredentialStatus({
+          syncId: 'test1',
+          async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
+            const updates = [];
+            let {index = 0} = cursor;
+            while(index < credentialIds.length) {
+              if(updates.length === limit) {
+                break;
+              }
+              const credentialId = credentialIds[index++];
+              updates.push({
+                credentialId,
+                referenceUpdate: {
+                  newProperty: `foo-${credentialId}`
+                },
+                getCredentialCapability,
+                updateStatusCapability,
+                status: {
+                  credentialStatus: {
+                    type: 'BitstringStatusListEntry',
+                    statusPurpose: 'revocation'
+                  },
+                  value: true
+                }
+              });
+            }
+            return {
+              updates,
+              cursor: {
+                // common field
+                hasMore: index < (credentialIds.length - 1),
+                // use-case specific fields
+                index
+              }
+            };
+          }
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      result.updateCount.should.equal(3);
+
+      // there should be updates to the reference records
+      for(const credentialId of credentialIds) {
+        const record = await vcReferences.get({credentialId});
+        record.reference.sequence.should.equal(1);
+        record.reference.newProperty.should.equal(`foo-${credentialId}`);
+      }
     });
 
     it('syncs credential status w/multiple calls', async () => {
