@@ -3,11 +3,12 @@
  */
 import * as database from '@bedrock/mongodb';
 import {
-  syncRecords, vcReferences
+  syncRecords, tasks, vcReferences
 } from '@bedrock/vc-issuer-coordinator-storage';
 
 export async function cleanDatabase() {
   await database.collections[syncRecords.COLLECTION_NAME].deleteMany({});
+  await database.collections[tasks.COLLECTION_NAME].deleteMany({});
   await database.collections[vcReferences.COLLECTION_NAME].deleteMany({});
 }
 
