@@ -1,15 +1,24 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 1.1.0 - 2025-mm-dd
+## 2.0.0 - 2025-mm-dd
 
 ### Added
-- Expose `syncCredentialStatus()` API for syncing the status
-  (and, optionally, reference information) of VCs that an
-  issuer coordinator references with some set of enumerable
-  status updates. The enumerable status updates are returned
-  from a function, `getStatusUpdates()`, that the caller of
-  `syncCredentialStatus()` provides. See the documentation
-  for `syncCredentialStatus()` for more details.
+- Expose `syncCredentialStatus()` API for syncing the status (and, optionally,
+  reference information) of VCs that an issuer coordinator references with
+  some set of enumerable status updates. The enumerable status updates are
+  returned from a function, `getStatusUpdates()`, that the caller of
+  `syncCredentialStatus()` provides. See the documentation for
+  `syncCredentialStatus()` for more details.
+- Add `tasks` API for storing, retrieving, and deleting arbitrary issuer
+  coordinator tasks. An application can be configured to optionally encrypt
+  all secrets in the task records and/or to set expiration dates for the
+  task records for increased security.
+
+### Changed
+- **BREAKING**: Changed `vc-reference` collection name to
+  `vc-issuer-coordinator-vc-reference` to better namespace the collection in
+  the event that it is shared with a wider set of collections in a top-level
+  application.
 
 ## 1.0.0 - 2024-11-24
 
