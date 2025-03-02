@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 2.0.0 - 2025-mm-dd
+## 2.0.0 - 2025-03-02
 
 ### Added
 - Expose `syncCredentialStatus()` API for syncing the status (and, optionally,
