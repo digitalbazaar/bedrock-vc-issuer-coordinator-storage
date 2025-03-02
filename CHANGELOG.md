@@ -19,6 +19,8 @@
   `vc-issuer-coordinator-vc-reference` to better namespace the collection in
   the event that it is shared with a wider set of collections in a top-level
   application.
+- **BREAKING**: Fix return value of `vcReferences.find()` to be an array of
+  found records such that it matches the function documentation.
 
 ## 1.0.0 - 2024-11-24
 
