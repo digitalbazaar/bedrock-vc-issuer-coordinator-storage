@@ -164,7 +164,6 @@ describe('Sync API', function() {
                 const credentialId = credentialIds[index++];
                 updates.push({
                   credentialId,
-                  newReferenceFields: {},
                   getCredentialCapability,
                   updateStatusCapability,
                   status: {
