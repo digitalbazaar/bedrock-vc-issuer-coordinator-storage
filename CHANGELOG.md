@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 2.0.1 - 2025-mm-dd
+## 2.0.1 - 2025-03-04
 
 ### Fixed
 - Use `result.modifiedCount` to enable newer mongodb driver.
