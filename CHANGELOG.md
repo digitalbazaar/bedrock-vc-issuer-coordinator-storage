@@ -1,5 +1,23 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 2.2.0 - 2025-mm-dd
+
+### Added
+- Enable specification of `expand` feature in status update objects provided
+  via `getStatusUpdates()`. This feature can be used to (optionally) expand
+  status entries prior to attempting to match them against the fields provided
+  in the `credentialStatus` value in the status update object. The `credentialStatus` value must minimally provide a `type` and a
+  `statusPurpose` to match against an (optionally expanded) status entry from
+  the target VC. By default, when the `expand` feature is present, the
+  `expand.type` value must match an unexpanded credential status entry in the
+  VC or else the update will fail. To make expansion optional such that the
+  `credentialStatus` value will still be checked against status entries that
+  do not match `expand.type`, set `expand.required = false`. The expand feature
+  must also include any required parameters for expansion in `expand.options`
+  and may include other optional parameters if desired, e.g.,
+  `statusPurpose` and `listLength` are optional parameters for expanding a
+  `TerseBitstringStatusList` status entry.
+
 ## 2.1.0 - 2025-03-06
 
 ### Added

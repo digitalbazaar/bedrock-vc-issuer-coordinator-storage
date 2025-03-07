@@ -19,8 +19,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       res.json({
         verifiableCredential: {
           '@context': [
-            'https://www.w3.org/ns/credentials/v2',
-
+            'https://www.w3.org/ns/credentials/v2'
           ],
           type: ['VerifiableCredential'],
           credentialSubject: {
@@ -47,6 +46,7 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
     }
     */
     const {credentialId, credentialStatus, status = true} = req.body;
+    // type MUST NOT be `TerseBitstringStatusListEntry` at this point
     if(credentialStatus.type !== 'BitstringStatusListEntry') {
       res.status(400).json({
         name: 'DataError',
@@ -64,14 +64,24 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
 function _initStatusInfo({credentialId}) {
   const statusInfo = {
     status: false,
-    entry: {
+    entry: null
+  };
+  if(credentialId.endsWith(':terse')) {
+    statusInfo.entry = {
+      type: 'TerseBitstringStatusListEntry',
+      terseStatusListIndex: STATUSES.size,
+      terseStatusListBaseUrl:
+        'https://status.example/statuses/1/status-lists'
+    };
+  } else {
+    statusInfo.entry = {
       type: 'BitstringStatusListEntry',
       statusPurpose: 'revocation',
       statusListIndex: STATUSES.size,
       statusListCredential:
         'https://status.example/statuses/1/status-lists/1'
-    }
-  };
+    };
+  }
   STATUSES.set(credentialId, statusInfo);
   return statusInfo;
 }
