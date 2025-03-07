@@ -4,7 +4,7 @@
 import * as bedrock from '@bedrock/core';
 import * as helpers from './helpers.js';
 import {
-  syncCredentialStatus, vcReferences, utils
+  syncCredentialStatus, utils, vcReferences
 } from '@bedrock/vc-issuer-coordinator-storage';
 import {randomUUID} from 'node:crypto';
 
@@ -87,23 +87,25 @@ describe('Sync API', function() {
       }
     });
 
-    // FIXME: use status entry expansion helper for this
-    it.skip('syncs TerseBitstringStatusEntry credential status', async () => {
+    it('syncs TerseBitstringStatusEntry credential status', async () => {
       // test leaving `BitstringStatusListEntry` alone and
       // expanding `TerseBitstringStatusListEntry`
-      const statusEntries = new Map([
-        // for even indexes w/cursor below use `BitstringStatusListEntry`
-        [0, {
-          type: 'BitstringStatusListEntry',
-          statusPurpose: 'revocation'
-        }],
+      const statusEntries = credentialIds.map((id, index) => {
+        if(index % 0 === 0) {
+          // for even indexes w/cursor below use `BitstringStatusListEntry`
+          return {
+            type: 'BitstringStatusListEntry',
+            statusPurpose: 'revocation'
+          };
+        }
         // for odd indexes use `TerseBitstringStatusListEntry`
-        [1, {
+        return {
           type: 'TerseBitstringStatusListEntry',
-          terseStatusListBaseUrl: 'https://status.example/status-lists',
-          terseStatusListIndex: 9876543210
-        }]
-      ]);
+          terseStatusListBaseUrl:
+            'https://status.example/statuses/1/status-lists',
+          terseStatusListIndex: Math.floor(Math.random() * 4294967295)
+        };
+      });
 
       let err;
       let result;
@@ -117,24 +119,20 @@ describe('Sync API', function() {
               if(updates.length === limit) {
                 break;
               }
-              const credentialId = credentialIds[index++];
+              const credentialId = credentialIds[index];
               updates.push({
                 credentialId,
                 getCredentialCapability,
                 updateStatusCapability,
                 status: {
-                  // FIXME: use status expansion helper
-                  // utils.expandCredentialStatus({
-                  //   credentialStatus: statusEntries.get(index % 2),
-                  //   statusPurpose: 'revocation'
-                  // })
-                  credentialStatus: {
-                    type: 'BitstringStatusListEntry',
+                  credentialStatus: utils.expandCredentialStatus({
+                    credentialStatus: statusEntries[index],
                     statusPurpose: 'revocation'
-                  },
+                  }),
                   value: true
                 }
               });
+              index++;
             }
             return {
               updates,
@@ -159,6 +157,8 @@ describe('Sync API', function() {
         const record = await vcReferences.get({credentialId});
         record.reference.sequence.should.equal(0);
       }
+
+      // check
     });
 
     it('syncs credential status w/reference update', async () => {
