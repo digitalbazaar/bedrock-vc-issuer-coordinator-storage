@@ -1,5 +1,11 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 2.1.0 - 2025-mm-dd
+
+### Added
+- Add `utils.expandCredentialStatus()` utility for expanding
+  `TerseBitstringStatusList` credential status entries.
+
 ## 2.0.1 - 2025-03-04
 
 ### Fixed

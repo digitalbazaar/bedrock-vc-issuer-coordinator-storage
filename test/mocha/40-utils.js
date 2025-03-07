@@ -23,7 +23,8 @@ describe('Utils API', function() {
       const expanded = utils.expandCredentialStatus({
         credentialStatus: {
           type: 'TerseBitstringStatusListEntry',
-          terseStatusListBaseUrl: 'https://status.example/status-lists/1',
+          terseStatusListBaseUrl:
+            'https://status.example/statuses/1/status-lists',
           terseStatusListIndex: 4000000001
         }
       });
@@ -31,7 +32,7 @@ describe('Utils API', function() {
         type: 'BitstringStatusListEntry',
         statusPurpose: 'revocation',
         statusListCredential:
-          'https://status.example/status-lists/1/revocation/59',
+          'https://status.example/statuses/1/status-lists/revocation/59',
         statusListIndex: '40577025'
       };
       expanded.should.deep.equal(expected);
@@ -41,7 +42,8 @@ describe('Utils API', function() {
       const expanded = utils.expandCredentialStatus({
         credentialStatus: {
           type: 'TerseBitstringStatusListEntry',
-          terseStatusListBaseUrl: 'https://status.example/status-lists/1',
+          terseStatusListBaseUrl:
+            'https://status.example/statuses/1/status-lists',
           terseStatusListIndex: 4000000001
         },
         statusPurpose: 'suspension'
@@ -50,7 +52,7 @@ describe('Utils API', function() {
         type: 'BitstringStatusListEntry',
         statusPurpose: 'suspension',
         statusListCredential:
-          'https://status.example/status-lists/1/suspension/59',
+          'https://status.example/statuses/1/status-lists/suspension/59',
         statusListIndex: '40577025'
       };
       expanded.should.deep.equal(expected);
@@ -60,7 +62,8 @@ describe('Utils API', function() {
       const expanded = utils.expandCredentialStatus({
         credentialStatus: {
           type: 'TerseBitstringStatusListEntry',
-          terseStatusListBaseUrl: 'https://status.example/status-lists/1',
+          terseStatusListBaseUrl:
+            'https://status.example/statuses/1/status-lists',
           terseStatusListIndex: 4000000001
         },
         listLength: 131072
@@ -69,7 +72,7 @@ describe('Utils API', function() {
         type: 'BitstringStatusListEntry',
         statusPurpose: 'revocation',
         statusListCredential:
-          'https://status.example/status-lists/1/revocation/30517',
+          'https://status.example/statuses/1/status-lists/revocation/30517',
         statusListIndex: '75777'
       };
       expanded.should.deep.equal(expected);

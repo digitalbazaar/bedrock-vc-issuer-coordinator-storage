@@ -46,7 +46,14 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       status: boolean
     }
     */
-    const {credentialId, status = true} = req.body;
+    const {credentialId, credentialStatus, status = true} = req.body;
+    if(credentialStatus.type !== 'BitstringStatusListEntry') {
+      res.status(400).json({
+        name: 'DataError',
+        message: 'Invalid credential status type.'
+      });
+      return;
+    }
     const statusInfo = STATUSES.get(credentialId) ??
       _initStatusInfo({credentialId});
     statusInfo.status = status;
