@@ -45,7 +45,9 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       status: boolean
     }
     */
-    const {credentialId, credentialStatus, status = true} = req.body;
+    const {
+      credentialId, credentialStatus, indexAllocator, status = true
+    } = req.body;
     // type MUST NOT be `TerseBitstringStatusListEntry` at this point
     if(credentialStatus.type !== 'BitstringStatusListEntry') {
       res.status(400).json({
@@ -56,6 +58,25 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
     }
     const statusInfo = STATUSES.get(credentialId) ??
       _initStatusInfo({credentialId});
+    if(indexAllocator === undefined) {
+      if(statusInfo.indexAllocator === undefined) {
+        res.status(400).json({
+          name: 'DataError',
+          message: 'Index allocator not set yet; it must be provided.'
+        });
+        return;
+      }
+    } else if(statusInfo.indexAllocator === undefined) {
+      // set index allocator
+      statusInfo.indexAllocator = indexAllocator;
+    } else if(indexAllocator !== statusInfo.indexAllocator) {
+      // `indexAllocator` must match since it was provided
+      res.status(400).json({
+        name: 'DataError',
+        message: 'Index allocator mismatch.'
+      });
+      return;
+    }
     statusInfo.status = status;
     res.status(200).end();
   }));
@@ -64,7 +85,8 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
 function _initStatusInfo({credentialId}) {
   const statusInfo = {
     status: false,
-    entry: null
+    entry: null,
+    indexAllocator: undefined
   };
   if(credentialId.endsWith(':terse')) {
     statusInfo.entry = {
