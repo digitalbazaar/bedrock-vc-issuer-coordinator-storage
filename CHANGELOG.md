@@ -1,5 +1,17 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 2.3.0 - 2025-mm-dd
+
+### Added
+- Reserve `indexAllocator` property as a special `vcReference` record property
+  and use it when updating status, if available. If not available, then the
+  `indexAllocator` provided in the status update object will be used, if
+  given. If no `indexAllocator` is given, then status for the VC must have
+  been previously set or else an error may be thrown by the status service.
+  If the status update object provides `indexAllocator` and it does not
+  match the existing `vcReference` record `indexAllocator` (if set), then
+  an error will be thrown.
+
 ## 2.2.0 - 2025-03-07
 
 ### Added
