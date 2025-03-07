@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 2.3.0 - 2025-mm-dd
+## 2.3.0 - 2025-03-07
 
 ### Added
 - Reserve `indexAllocator` property as a special `vcReference` record property
