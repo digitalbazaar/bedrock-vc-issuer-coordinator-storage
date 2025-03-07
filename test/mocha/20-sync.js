@@ -157,8 +157,6 @@ describe('Sync API', function() {
         const record = await vcReferences.get({credentialId});
         record.reference.sequence.should.equal(0);
       }
-
-      // check
     });
 
     it('syncs credential status w/reference update', async () => {
