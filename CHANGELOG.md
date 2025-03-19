@@ -3,6 +3,7 @@
 ## 2.4.0 - 2025-03-dd
 
 ### Added
+- Add `limit` to possible options for `syncCredentialStatus()`.
 - Return `hasMore: true|false` signal from `syncCredentialStatus()`.
 
 ## 2.3.1 - 2025-03-19
