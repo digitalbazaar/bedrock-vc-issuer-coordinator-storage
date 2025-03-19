@@ -29,7 +29,8 @@ describe('Sync API', function() {
         await vcReferences.insert({
           reference: {
             sequence: 0,
-            credentialId
+            credentialId,
+            shouldRemain: true
           }
         });
       }
@@ -562,6 +563,7 @@ describe('Sync API', function() {
         const record = await vcReferences.get({credentialId});
         record.reference.sequence.should.equal(1);
         record.reference.newProperty.should.equal(`foo-${credentialId}`);
+        record.reference.shouldRemain.should.equal(true);
       }
     });
 
