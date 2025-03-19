@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 2.4.0 - 2025-03-dd
+## 2.4.0 - 2025-03-19
 
 ### Added
 - Add `limit` to possible options for `syncCredentialStatus()`.
