@@ -1,5 +1,10 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 2.4.0 - 2025-03-dd
+
+### Added
+- Return `hasMore: true|false` signal from `syncCredentialStatus()`.
+
 ## 2.3.1 - 2025-03-19
 
 ### Fixed

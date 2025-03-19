@@ -68,7 +68,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -81,6 +81,65 @@ describe('Sync API', function() {
       assertNoError(err);
       should.exist(result);
       result.updateCount.should.equal(3);
+      result.hasMore.should.equal(false);
+
+      // there should be no update to the reference records
+      for(const credentialId of credentialIds) {
+        const record = await vcReferences.get({credentialId});
+        record.reference.sequence.should.equal(0);
+      }
+    });
+
+    it('syncs and returns hasMore=true', async () => {
+      const expectedHasMore = [true, true, false];
+      for(let i = 0; i < 3; ++i) {
+        let err;
+        let result;
+        try {
+          result = await syncCredentialStatus({
+            syncId: 'test1',
+            options: {limit: 1},
+            async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
+              const updates = [];
+              let {index = 0} = cursor;
+              while(index < credentialIds.length) {
+                if(updates.length === limit) {
+                  break;
+                }
+                const credentialId = credentialIds[index++];
+                updates.push({
+                  credentialId,
+                  getCredentialCapability,
+                  updateStatusCapability,
+                  status: {
+                    indexAllocator: 'urn:correct',
+                    credentialStatus: {
+                      type: 'BitstringStatusListEntry',
+                      statusPurpose: 'revocation'
+                    },
+                    value: true
+                  }
+                });
+              }
+              return {
+                updates,
+                cursor: {
+                  // common field
+                  hasMore: index < credentialIds.length,
+                  // use-case specific fields
+                  index
+                }
+              };
+            }
+          });
+        } catch(e) {
+          err = e;
+        }
+        assertNoError(err);
+        should.exist(result);
+        result.updateCount.should.equal(1);
+        result.hasMore.should.equal(expectedHasMore[i]);
+      }
 
       // there should be no update to the reference records
       for(const credentialId of credentialIds) {
@@ -121,7 +180,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -183,7 +242,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -236,7 +295,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -277,7 +336,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -339,7 +398,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -413,7 +472,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -488,7 +547,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -544,7 +603,7 @@ describe('Sync API', function() {
               updates,
               cursor: {
                 // common field
-                hasMore: index < (credentialIds.length - 1),
+                hasMore: index < credentialIds.length,
                 // use-case specific fields
                 index
               }
@@ -604,7 +663,7 @@ describe('Sync API', function() {
                 updates,
                 cursor: {
                   // common field
-                  hasMore: index < (credentialIds.length - 1),
+                  hasMore: index < credentialIds.length,
                   // use-case specific fields
                   index
                 }
