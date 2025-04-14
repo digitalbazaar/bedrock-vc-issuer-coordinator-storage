@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.0.0 - 2025-04-dd
+## 3.0.0 - 2025-04-14
 
 ### Changed
 - Update dependencies.
