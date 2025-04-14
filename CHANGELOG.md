@@ -1,5 +1,17 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 3.0.0 - 2025-04-dd
+
+### Changed
+- Update dependencies.
+- Update peer dependencies.
+  - `@bedrock/core@6.3.0`.
+  - **BREAKING**: `@bedrock/mongodb@11`.
+    - Use MongoDB driver 6.x and update error names and details.
+    - See changelog for details.
+- Update dev dependencies.
+- Update test dependencies.
+
 ## 2.4.0 - 2025-03-19
 
 ### Added
