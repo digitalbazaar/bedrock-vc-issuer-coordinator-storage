@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.0.1 - 2025-04-dd
+## 3.0.1 - 2025-04-24
 
 ### Fixed
 - Fix typos in index allocator checks.
