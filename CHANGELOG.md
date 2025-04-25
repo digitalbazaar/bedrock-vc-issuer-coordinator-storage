@@ -1,5 +1,17 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 3.1.0 - 2025-04-dd
+
+### Added
+- Allow a previously retrieved `reference` object from a VC reference record
+  to be specified in a status update object. This is an optimization to support
+  sync views that already need to retrieve the `reference` from a record when
+  constructing status update objects -- without a need to have `reference`
+  retrieved during the subsequent status update. Atomicity of VC reference
+  record updates (in the case that `referenceUpdate` is also provided) will
+  continue to function properly but an update will obviously only succeed
+  (without a conflict error being raised) if the passed `reference` is fresh.
+
 ## 3.0.1 - 2025-04-24
 
 ### Fixed
