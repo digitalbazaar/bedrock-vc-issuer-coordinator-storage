@@ -1,6 +1,6 @@
 {
   "name": "@bedrock/vc-issuer-coordinator-storage",
-  "version": "3.0.2-0",
+  "version": "3.1.0",
   "type": "module",
   "description": "Bedrock VC Issuer Coordinator Storage",
   "main": "./lib/index.js",
