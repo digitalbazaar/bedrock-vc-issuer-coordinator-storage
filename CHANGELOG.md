@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.1.0 - 2025-04-dd
+## 3.1.0 - 2025-04-25
 
 ### Added
 - Allow a previously retrieved `reference` object from a VC reference record
