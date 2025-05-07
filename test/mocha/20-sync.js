@@ -413,7 +413,7 @@ describe('Sync API', function() {
       should.exist(err?.cause?.cause);
       err.cause.name.should.equal('OperationError');
       err.cause.details.httpStatusCode.should.equal(409);
-      err.cause.cause.name.should.equal('InvalidStatusError');
+      err.cause.cause.name.should.equal('ConstraintError');
       err.cause.cause.message.should.equal('Index allocator mismatch.');
     });
 

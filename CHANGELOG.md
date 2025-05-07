@@ -1,5 +1,12 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 3.1.1 - 2025-05-dd
+
+### Fixed
+- Fix typo with `InvalidStatusError` which should have read
+  `InvalidStateError`; however, a more error here is `ConstraintError` so it
+  is used instead.
+
 ## 3.1.0 - 2025-04-25
 
 ### Added
