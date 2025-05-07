@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.1.1 - 2025-05-dd
+## 3.1.1 - 2025-05-07
 
 ### Fixed
 - Fix typo with `InvalidStatusError` which should have read
