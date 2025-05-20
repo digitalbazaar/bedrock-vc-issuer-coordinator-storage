@@ -5,6 +5,8 @@ import * as bedrock from '@bedrock/core';
 import {asyncHandler} from '@bedrock/express';
 import '@bedrock/vc-issuer-coordinator-storage';
 
+const {util: {BedrockError}} = bedrock;
+
 // in-memory credential status changes
 const STATUSES = new Map();
 
@@ -16,6 +18,15 @@ bedrock.events.on('bedrock-express.configure.routes', app => {
       const {credentialId} = req.params;
       const statusInfo = STATUSES.get(credentialId) ??
         _initStatusInfo({credentialId});
+      if(credentialId.startsWith('urn:special:not-found:')) {
+        throw new BedrockError('Credential not found.', {
+          name: 'NotFoundError',
+          details: {
+            httpStatusCode: 404,
+            public: true
+          }
+        });
+      }
       res.json({
         verifiableCredential: {
           '@context': [
