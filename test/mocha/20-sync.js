@@ -90,6 +90,135 @@ describe('Sync API', function() {
       }
     });
 
+    it('fails w/ default "ignoreCredentialNotFound=false"', async () => {
+      // add "dangling" `vcReference` record that has no associated VC
+      {
+        const credentialId = 'urn:special:not-found:1';
+        credentialIds.push(credentialId);
+        await vcReferences.insert({
+          reference: {
+            sequence: 0,
+            credentialId,
+            shouldRemain: true
+          }
+        });
+      }
+
+      let err;
+      let result;
+      try {
+        result = await syncCredentialStatus({
+          syncId: 'test1',
+          async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
+            const updates = [];
+            let {index = 0} = cursor;
+            while(index < credentialIds.length) {
+              if(updates.length === limit) {
+                break;
+              }
+              const credentialId = credentialIds[index++];
+              updates.push({
+                credentialId,
+                getCredentialCapability,
+                updateStatusCapability,
+                status: {
+                  indexAllocator: 'urn:correct',
+                  credentialStatus: {
+                    type: 'BitstringStatusListEntry',
+                    statusPurpose: 'revocation'
+                  },
+                  value: true
+                }
+              });
+            }
+            return {
+              updates,
+              cursor: {
+                // common field
+                hasMore: index < credentialIds.length,
+                // use-case specific fields
+                index
+              }
+            };
+          }
+        });
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(result);
+      should.exist(err?.cause?.cause);
+      err.cause.cause.message.should.equal('Credential not found.');
+    });
+
+    it('passes w/ "ignoreCredentialNotFound=true"', async () => {
+      // add "dangling" `vcReference` record that has no associated VC
+      {
+        const credentialId = 'urn:special:not-found:1';
+        credentialIds.push(credentialId);
+        await vcReferences.insert({
+          reference: {
+            sequence: 0,
+            credentialId,
+            shouldRemain: true
+          }
+        });
+      }
+
+      let err;
+      let result;
+      try {
+        result = await syncCredentialStatus({
+          syncId: 'test1',
+          options: {ignoreCredentialNotFound: true},
+          async getStatusUpdates({cursor = {index: 0}, limit = 100} = {}) {
+            const updates = [];
+            let {index = 0} = cursor;
+            while(index < credentialIds.length) {
+              if(updates.length === limit) {
+                break;
+              }
+              const credentialId = credentialIds[index++];
+              updates.push({
+                credentialId,
+                getCredentialCapability,
+                updateStatusCapability,
+                status: {
+                  indexAllocator: 'urn:correct',
+                  credentialStatus: {
+                    type: 'BitstringStatusListEntry',
+                    statusPurpose: 'revocation'
+                  },
+                  value: true
+                }
+              });
+            }
+            return {
+              updates,
+              cursor: {
+                // common field
+                hasMore: index < credentialIds.length,
+                // use-case specific fields
+                index
+              }
+            };
+          }
+        });
+      } catch(e) {
+        err = e;
+      }
+      assertNoError(err);
+      should.exist(result);
+      // should be `4` with "dangling" `vcReference` record
+      result.updateCount.should.equal(4);
+      result.hasMore.should.equal(false);
+
+      // there should be no update to the reference records
+      for(const credentialId of credentialIds) {
+        const record = await vcReferences.get({credentialId});
+        record.reference.sequence.should.equal(0);
+      }
+    });
+
     it('syncs and returns hasMore=true', async () => {
       const expectedHasMore = [true, true, false];
       for(let i = 0; i < 3; ++i) {

@@ -1,5 +1,11 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
+## 3.2.0 - 2025-05-dd
+
+### Added
+- Add `ignoreCredentialNotFound` option to `syncCredentialStatus()`. See
+  the documentation on that method for its use.
+
 ## 3.1.1 - 2025-05-07
 
 ### Fixed
