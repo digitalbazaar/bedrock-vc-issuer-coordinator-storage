@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.3.0 - 2025-05-dd
+## 3.3.0 - 2025-05-22
 
 ### Changed
 - Use `@digitalbazaar/lru-memoize@4`. Existing cache defaults and options
