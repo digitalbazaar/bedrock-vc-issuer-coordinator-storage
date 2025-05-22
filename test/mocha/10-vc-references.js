@@ -19,7 +19,7 @@ describe('VC References', function() {
       const record2 = await vcReferences.get({credentialId});
       record1.should.eql(record2);
       // should fetch the same record again after clearing the in-memory cache
-      vcReferences._CACHE.cache.reset();
+      vcReferences._CACHE.cache.clear();
       const record3 = await vcReferences.get({credentialId});
       record2.should.eql(record3);
     });
@@ -35,7 +35,7 @@ describe('VC References', function() {
       const record2 = await vcReferences.get({credentialId});
       record1.should.eql(record2);
       // should fetch the same record again after clearing the in-memory cache
-      vcReferences._CACHE.cache.reset();
+      vcReferences._CACHE.cache.clear();
       const record3 = await vcReferences.get({credentialId});
       record2.should.eql(record3);
     });
@@ -106,7 +106,7 @@ describe('VC References', function() {
       const record2 = await vcReferences.get({credentialId});
       record1.should.eql(record2);
       // should fetch the same record again after clearing the in-memory cache
-      vcReferences._CACHE.cache.reset();
+      vcReferences._CACHE.cache.clear();
       const record3 = await vcReferences.get({credentialId});
       record2.should.eql(record3);
     });
@@ -137,7 +137,7 @@ describe('VC References', function() {
   describe('update()', () => {
     it('should update a record', async () => {
       // clear in-memory cache
-      vcReferences._CACHE.cache.reset();
+      vcReferences._CACHE.cache.clear();
 
       const credentialId = crypto.randomUUID();
       const record1 = await vcReferences.insert({
@@ -150,11 +150,11 @@ describe('VC References', function() {
       // first fetch should hit database, second in-memory cache
       const record1a = await vcReferences.get({credentialId});
       record1a.should.eql(record1a);
-      vcReferences._CACHE.cache.itemCount.should.equal(1);
+      vcReferences._CACHE.cache.size.should.equal(1);
       const record1b = await vcReferences.get({credentialId});
       record1a.should.eql(record1b);
       // should have reused in-memory cache
-      vcReferences._CACHE.cache.itemCount.should.equal(1);
+      vcReferences._CACHE.cache.size.should.equal(1);
 
       // now update
       await vcReferences.update({
@@ -164,7 +164,7 @@ describe('VC References', function() {
         }
       });
       // should have cleared in memory cache entry
-      vcReferences._CACHE.cache.itemCount.should.equal(0);
+      vcReferences._CACHE.cache.size.should.equal(0);
       const record2 = await vcReferences.get({credentialId});
       record1.should.not.eql(record2);
       const expectedRecord2 = {
@@ -173,10 +173,10 @@ describe('VC References', function() {
       };
       record2.should.eql(expectedRecord2);
       // should have used in-memory cache with new record
-      vcReferences._CACHE.cache.itemCount.should.equal(1);
+      vcReferences._CACHE.cache.size.should.equal(1);
 
       // should fetch the same record again after clearing the in-memory cache
-      vcReferences._CACHE.cache.reset();
+      vcReferences._CACHE.cache.clear();
       const record3 = await vcReferences.get({credentialId});
       record2.should.eql(record3);
     });
