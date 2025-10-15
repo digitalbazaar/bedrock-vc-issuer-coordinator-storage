@@ -1,6 +1,6 @@
 # bedrock-vc-issuer-coordinator-storage ChangeLog
 
-## 3.3.1 - 2025-10-xx
+## 3.3.1 - 2025-10-15
 
 ### Fixed
 - Fix `@bedrock/app-identity` peer dependency version constraint.
